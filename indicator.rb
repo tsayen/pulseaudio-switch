@@ -1,9 +1,19 @@
-require "rubygems"
-require "ruby-libappindicator"
+require 'ruby-libappindicator'
 
-ai = AppIndicator::AppIndicator.new("test", "multimedia-volume-control", AppIndicator::Category::HARDWARE);
+tray = AppIndicator::AppIndicator.new('test', 'multimedia-volume-control', AppIndicator::Category::HARDWARE)
+group = []
+menu = Gtk::Menu.new
+network = Gtk::RadioMenuItem.new(group, "network")
+menu.append(network)
+network.show
+group.push(network)
+local = Gtk::RadioMenuItem.new(group, "local")
+menu.append(local)
+local.show
+local.set_active(false)
+group.push(local)
 
-ai.set_menu(Gtk::Menu.new)
-ai.set_status(AppIndicator::Status::ACTIVE)
+tray.set_menu(menu)
+tray.set_status(AppIndicator::Status::ACTIVE)
 
 Gtk.main
