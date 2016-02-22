@@ -2,27 +2,27 @@ require 'ruby-libappindicator'
 require 'gtk2'
 
 class SwitchUi
-    def initialize &on_toggle
+    def initialize(model)
         @icon = AppIndicator::AppIndicator.new('test', 'multimedia-volume-control', AppIndicator::Category::HARDWARE)
         @menu = Gtk::Menu.new
+        @group = []
         @icon.set_menu(@menu)
         @icon.set_status(AppIndicator::Status::ACTIVE)
+        @item_by_sink_id = {}
 
-        switch = []
+        model.when_sink_added do |sink|
+            menu_item = Gtk::RadioMenuItem.new(@group, sink.title)
+            @menu.append(menu_item)
+            @group.push(menu_item)
+            @item_by_sink_id[sink.id] = menu_item
+            menu_item.signal_connect('toggled') do
+                model.select_sink(sink) if menu_item.active?
+            end
+            menu_item.show
+        end
 
-        network = Gtk::RadioMenuItem.new(switch, 'network')
-        @menu.append(network)
-        network.show
-        switch.push(network)
-
-        network.signal_connect('toggled', &on_toggle)
-
-        local = Gtk::RadioMenuItem.new(switch, 'local')
-        @menu.append(local)
-        local.show
-        local.set_active(false)
-        switch.push(local)
-
-        local.signal_connect('toggled', &on_toggle)
+        model.when_sink_selected do |sink|
+            @item_by_sink_id[sink.id].set_active(true)
+        end
     end
 end
