@@ -3,7 +3,14 @@ class SwitchModel
         @sinks = {}
     end
 
-    def when_sink_added &block
+    def enable
+        read_sinks.each do |sink|
+            add_sink sink
+            puts 'adding sink ' + sink.inspect
+        end
+    end
+
+    def when_sink_added(&block)
         @sink_added = block
     end
 
@@ -17,8 +24,22 @@ class SwitchModel
         puts sink.id
     end
 
-    def when_sink_selected &block
+    def when_sink_selected(&block)
         @sink_selected = block
+    end
+
+    private
+
+    def read_sinks
+        lines = `pactl list sinks | grep -e 'Sink #' -e 'Name' -e 'Description'`.lines
+        sinks = []
+        while lines.size > 0
+            number = lines.shift.sub(/Sink/, '').strip
+            id = lines.shift.sub(/Name:/, '').strip
+            title = lines.shift.sub(/Description:/, '').strip
+            sinks.push Sink.new(id, number, title)
+        end
+        sinks
     end
 end
 
