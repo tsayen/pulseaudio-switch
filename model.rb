@@ -14,6 +14,12 @@ class SwitchModel
         @sink_added = block
     end
 
+    def when_sink_selected(&block)
+        @sink_selected = block
+    end
+
+    private
+
     def add_sink(sink)
         @sinks[sink.id] = sink
         @sink_added.call(sink)
@@ -23,12 +29,6 @@ class SwitchModel
         @current_sink = sink
         puts sink.id
     end
-
-    def when_sink_selected(&block)
-        @sink_selected = block
-    end
-
-    private
 
     def read_sinks
         lines = `pactl list sinks | grep -e 'Sink #' -e 'Name' -e 'Description'`.lines
