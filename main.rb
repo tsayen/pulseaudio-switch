@@ -2,12 +2,13 @@ require './ui.rb'
 require './model.rb'
 
 def read_sinks
-    lines = `pactl list sinks | grep -e 'Name' -e 'Description'`.lines
+    lines = `pactl list sinks | grep -e 'Sink #' -e 'Name' -e 'Description'`.lines
     sinks = []
     while lines.size > 0
+        number = lines.shift.sub(/Sink/, '').strip
         id = lines.shift.sub(/Name:/, '').strip
-        name = lines.shift.sub(/Description:/, '').strip
-        sinks.push Sink.new(id, name)
+        title = lines.shift.sub(/Description:/, '').strip
+        sinks.push Sink.new(id, number, title)
     end
     sinks
 end

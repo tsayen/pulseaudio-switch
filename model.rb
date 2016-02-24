@@ -23,10 +23,11 @@ class SwitchModel
 end
 
 class Sink
-    attr_reader :id, :title
+    attr_reader :id, :number, :title
 
-    def initialize(id, title)
+    def initialize(id, number, title)
         @id = id
+        @number = number
         @title = title
     end
 end
