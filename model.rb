@@ -1,7 +1,7 @@
 class SwitchModel
     def initialize
         @sinks = {}
-    end
+    en
 
     def enable
         read_sinks.each do |sink|
@@ -12,6 +12,9 @@ class SwitchModel
 
     def when_sink_added(&block)
         @sink_added = block
+        @sinks.each_value do |sink|
+            @sink_added.call sink
+        end
     end
 
     def when_sink_selected(&block)
@@ -22,7 +25,7 @@ class SwitchModel
 
     def add_sink(sink)
         @sinks[sink.id] = sink
-        @sink_added.call(sink)
+        @sink_added.call(sink) if @sink_added
     end
 
     def select_sink(sink)

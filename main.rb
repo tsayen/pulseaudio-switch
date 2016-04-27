@@ -2,8 +2,6 @@ require './ui.rb'
 require './model.rb'
 
 model = SwitchModel.new
-SwitchUi.new(model)
+ui = SwitchUi.new(model) do
 
-model.enable
-
-Gtk.main
+ui.start
