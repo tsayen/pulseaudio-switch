@@ -1,5 +1,5 @@
-require 'ruby-libappindicator'
 require 'gtk2'
+require 'ruby-libappindicator'
 
 module PulseAudioSwitch
   class UI
