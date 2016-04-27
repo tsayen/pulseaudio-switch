@@ -1,35 +1,56 @@
 require 'ruby-libappindicator'
 require 'gtk2'
 
-class SwitchUi
+class UI
   def initialize(model)
-    @icon = AppIndicator::AppIndicator.new('test', 'multimedia-volume-control', AppIndicator::Category::HARDWARE)
+    @model = model
     @menu = Gtk::Menu.new
     @group = []
-    @icon.set_menu(@menu)
-    @icon.set_status(AppIndicator::Status::ACTIVE)
-    @item_by_sink_id = {}
-    @model = model
+    add_to_tray
+    subscribe
   end
 
-  def start
-    @model.when_sink_added do |sink|
-      menu_item = Gtk::RadioMenuItem.new(@group, sink.title)
-      @menu.append(menu_item)
-      @group.push(menu_item)
-      @item_by_sink_id[sink.id] = menu_item
-      menu_item.signal_connect('toggled') do
-        model.select_sink(sink) if menu_item.active?
-      end
-      menu_item.show
+  private
+
+  ID = 'test'.freeze
+  ICON_NAME = 'multimedia-volume-control'.freeze
+  CATEGORY = AppIndicator::Category::HARDWARE
+
+  def add_to_tray
+    indicator = AppIndicator::AppIndicator.new(ID, ICON_NAME, CATEGORY)
+    indicator.set_menu @menu
+    indicator.set_status AppIndicator::Status::ACTIVE
+  end
+
+  def subscribe
+    @model.watch { refresh(model.sinks) }
+  end
+
+  def refresh(sinks)
+    clear
+    sinks.each { |sink| add new_item(sink) }
+  end
+
+  def add(item)
+    @menu.append item
+    @group.push item
+    item.show
+  end
+
+  def new_item(sink)
+    item = Gtk::RadioMenuItem.new(@group, sink[:title])
+    item.signal_connect('toggled') do
+      select(sink[:id]) if item.active?
     end
+    item.set_active(sink[:active])
+    item
+  end
 
-    @model.when_sink_selected do |sink|
-      @item_by_sink_id[sink.id].set_active(true)
-    end
+  def select(sink_id)
+    @model.select_sink sink_id
+  end
 
-    @model.enable
-
-    Gtk.main
+  def clear
+    @menu.remove(@group.pop) until @group.empty?
   end
 end
