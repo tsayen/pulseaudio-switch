@@ -16,8 +16,8 @@ module PulseAudioSwitch
     def add_to_tray
       indicator =
         AppIndicator::AppIndicator.new(self.class.name, 'multimedia-volume-control', AppIndicator::Category::HARDWARE)
-      indicator.set_menu @menu
-      indicator.set_status AppIndicator::Status::ACTIVE
+      indicator.set_menu(@menu)
+      indicator.set_status(AppIndicator::Status::ACTIVE)
     end
 
     def subscribe
