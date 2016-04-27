@@ -21,10 +21,10 @@ module PulseAudioSwitch
     end
 
     def subscribe
-      @model.watch { refresh(model.sinks) }
+      @model.watch { draw(model.sinks) }
     end
 
-    def refresh(sinks)
+    def draw(sinks)
       clear
       sinks.each { |sink| add new_item(sink) }
     end
