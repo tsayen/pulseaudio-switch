@@ -6,7 +6,7 @@ module PulseAudioSwitch
     def initialize(model)
       @model = model
       @menu = Gtk::Menu.new
-      @group = []
+      @items = []
       add_to_tray
       subscribe
     end
@@ -31,12 +31,12 @@ module PulseAudioSwitch
 
     def add(item)
       @menu.append item
-      @group.push item
+      @items.push item
       item.show
     end
 
     def new_item(sink)
-      item = Gtk::RadioMenuItem.new(@group, sink[:title])
+      item = Gtk::RadioMenuItem.new(@items, sink[:title])
       item.signal_connect('toggled') do
         select(sink[:id]) if item.active?
       end
@@ -49,7 +49,7 @@ module PulseAudioSwitch
     end
 
     def clear
-      @menu.remove(@group.pop) until @group.empty?
+      @menu.remove(@items.pop) until @items.empty?
     end
   end
 end
