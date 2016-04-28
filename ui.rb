@@ -21,7 +21,7 @@ module PulseAudioSwitch
     end
 
     def subscribe
-      @model.watch { draw(model.sinks) }
+      @model.watch { draw(@model.sinks) }
     end
 
     def draw(sinks)
