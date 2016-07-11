@@ -1,0 +1,47 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    atk (3.0.8)
+      glib2 (= 3.0.8)
+    cairo (1.15.2)
+      pkg-config (>= 1.1.5)
+    diff-lcs (1.2.5)
+    gdk_pixbuf2 (3.0.8)
+      glib2 (= 3.0.8)
+    glib2 (3.0.8)
+      pkg-config
+    gtk2 (3.0.8)
+      atk (= 3.0.8)
+      gdk_pixbuf2 (= 3.0.8)
+      pango (= 3.0.8)
+    pango (3.0.8)
+      cairo (>= 1.14.0)
+      glib2 (= 3.0.8)
+    pkg-config (1.1.7)
+    rspec (3.5.0)
+      rspec-core (~> 3.5.0)
+      rspec-expectations (~> 3.5.0)
+      rspec-mocks (~> 3.5.0)
+    rspec-core (3.5.1)
+      rspec-support (~> 3.5.0)
+    rspec-expectations (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-mocks (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-support (3.5.0)
+    ruby-libappindicator (0.1.5)
+      gtk2
+      pkg-config
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  gtk2
+  rspec
+  ruby-libappindicator
+
+BUNDLED WITH
+   1.11.2
