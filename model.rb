@@ -16,13 +16,6 @@ module PulseAudioSwitch
       end
     end
 
-    def when_sink_added(&block)
-      @sink_added = block
-      @sinks.each_value do |sink|
-        @sink_added.call sink
-      end
-    end
-
     def when_sink_selected(&block)
       @sink_selected = block
     end
