@@ -35,5 +35,16 @@ class PulseAudio
       sinks.push Sink.new(id, number, title)
     end
     sinks
+
+    # -      lines = `pactl list sinks | grep -e 'Sink #' -e 'Name' -e 'Description'`.lines
+    # -      sinks = []
+    # -      until lines.empty?
+    # -        number = lines.shift.sub(/Sink/, '').strip
+    # -        id = lines.shift.sub(/Name:/, '').strip
+    # -        title = lines.shift.sub(/Description:/, '').strip
+    # -
+    # -        sinks.push(id: id, number: number, title: title)
+    # -      end
+    # -      sinks
   end
 end
