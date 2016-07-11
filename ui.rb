@@ -14,8 +14,11 @@ module PulseAudioSwitch
     private
 
     def add_to_tray
-      indicator =
-        AppIndicator::AppIndicator.new(self.class.name, 'multimedia-volume-control', AppIndicator::Category::HARDWARE)
+      indicator = AppIndicator::AppIndicator.new(
+        self.class.name,
+        'multimedia-volume-control',
+        AppIndicator::Category::HARDWARE
+      )
       indicator.set_menu(@menu)
       indicator.set_status(AppIndicator::Status::ACTIVE)
     end
@@ -38,14 +41,10 @@ module PulseAudioSwitch
     def new_item(sink)
       item = Gtk::RadioMenuItem.new(@items, sink[:title])
       item.signal_connect('toggled') do
-        select(sink[:id]) if item.active?
+        @model.select_sink(sink[:id]) if item.active?
       end
       item.set_active(sink[:active])
       item
-    end
-
-    def select(sink_id)
-      @model.select_sink sink_id
     end
 
     def clear
