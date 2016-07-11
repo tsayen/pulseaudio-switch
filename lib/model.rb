@@ -9,17 +9,6 @@ module PulseAudioSwitch
       @update.call
     end
 
-    def enable
-      read_sinks.each do |sink|
-        add_sink sink
-        puts 'adding sink ' + sink.inspect
-      end
-    end
-
-    def when_sink_selected(&block)
-      @sink_selected = block
-    end
-
     def add_sink(sink)
       @sinks[sink.id] = sink
       @sink_added.call(sink) if @sink_added
