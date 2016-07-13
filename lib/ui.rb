@@ -39,7 +39,7 @@ module PulseAudioSwitch
     end
 
     def new_item(sink)
-      item = Gtk::RadioMenuItem.new(@items, sink[:title])
+      item = Gtk::RadioMenuItem.new(@items, sink[:description])
       item.signal_connect('toggled') do
         @model.select_sink(sink[:id]) if item.active?
       end

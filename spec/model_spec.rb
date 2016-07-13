@@ -1,5 +1,4 @@
 require 'model.rb'
-require 'pulseaudio.rb'
 
 RSpec.describe PulseAudioSwitch::Model do
   it 'should get sinks from pulseaudio' do
