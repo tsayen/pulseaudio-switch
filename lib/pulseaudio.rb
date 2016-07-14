@@ -4,22 +4,6 @@ module PulseAudioSwitch
       parse_sinks.each @sink_added
     end
 
-    def on_sink_add(&block)
-      @sink_added = block
-    end
-
-    def on_sink_remove(&block)
-      @sink_removed = block
-    end
-
-    def on_input_add(&block)
-      @input_added = block
-    end
-
-    def on_input_remove(&block)
-      @input_removed = block
-    end
-
     def move_input(input, sink)
     end
 
@@ -27,7 +11,7 @@ module PulseAudioSwitch
     end
 
     def sinks
-      PulseAudio.parse_sinks(`pactl list sinks`)
+      self.class.parse_sinks(`pactl list sinks`)
     end
 
     def self.parse_sinks(out)
