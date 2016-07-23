@@ -29,7 +29,6 @@ module AudioSwitch
 
     def unsubscribe
       @pactl_sub_out.close
-      @pactl_sub_in.close
     end
 
     def self.parse_sinks(out)
