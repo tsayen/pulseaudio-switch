@@ -17,9 +17,9 @@ module AudioSwitch
     end
 
     def subscribe(command = 'pactl subscribe')
-      @pactl_sub_out, @pactl_sub_in = PTY.spawn(command)
+      @pactl_sub = PTY.spawn(command)[0]
       begin
-        @pactl_sub_out.each do |line|
+        @pactl_sub.each do |line|
           yield self.class.parse_event(line)
         end
       rescue Errno::EIO, IOError
@@ -28,7 +28,7 @@ module AudioSwitch
     end
 
     def unsubscribe
-      @pactl_sub_out.close
+      @pactl_sub.close
     end
 
     def self.parse_sinks(out)
