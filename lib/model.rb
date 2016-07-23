@@ -1,4 +1,4 @@
-module PulseAudioSwitch
+module AudioSwitch
   class Model
     def initialize(pulse_audio)
       @sinks = {}

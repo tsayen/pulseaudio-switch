@@ -6,7 +6,7 @@ require_relative 'ui.rb'
 require_relative 'model.rb'
 require_relative 'pulseaudio.rb'
 
-model = PulseAudioSwitch::Model.new(PulseAudioSwitch::PulseAudio.new)
-PulseAudioSwitch::UI.new(model)
+model = AudioSwitch::Model.new(AudioSwitch::Pactl.new)
+AudioSwitch::UI.new(model)
 
 Gtk.main

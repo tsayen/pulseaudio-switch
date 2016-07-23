@@ -1,7 +1,7 @@
 require 'gtk2'
 require 'ruby-libappindicator'
 
-module PulseAudioSwitch
+module AudioSwitch
   class UI
     def initialize(model)
       @model = model
