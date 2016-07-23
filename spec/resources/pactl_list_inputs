@@ -1,0 +1,66 @@
+Sink Input #100
+	Driver: protocol-native.c
+	Owner Module: 9
+	Client: 47
+	Sink: 0
+	Sample Specification: s16le 2ch 44100Hz
+	Channel Map: front-left,front-right
+	Format: pcm, format.sample_format = "\"s16le\""  format.channels = "2"  format.rate = "44100"  format.channel_map = "\"front-left,front-right\""
+	Corked: no
+	Mute: no
+	Volume: 0: 100% 1: 100%
+	        0: 0.00 dB 1: 0.00 dB
+	        balance 0.00
+	Buffer Latency: 99841 usec
+	Sink Latency: 24406 usec
+	Resample method: n/a
+	Properties:
+		media.name = "'Biscuit' by 'Portishead'"
+		application.name = "Clementine"
+		native-protocol.peer = "UNIX socket client"
+		native-protocol.version = "28"
+		media.role = "music"
+		application.process.id = "4175"
+		application.process.user = "tsayen"
+		application.process.host = "dell-tolika"
+		application.process.binary = "clementine"
+		application.language = "en_US.UTF-8"
+		window.x11.display = ":0"
+		application.process.machine_id = "286ff4227d61a8af2c82b3f356917d9a"
+		application.process.session_id = "c2"
+		application.icon_name = "clementine"
+		module-stream-restore.id = "sink-input-by-media-role:music"
+		media.title = "Biscuit"
+		media.artist = "Portishead"
+
+Sink Input #104
+	Driver: protocol-native.c
+	Owner Module: 9
+	Client: 31
+	Sink: 0
+	Sample Specification: float32le 2ch 44100Hz
+	Channel Map: front-left,front-right
+	Format: pcm, format.sample_format = "\"float32le\""  format.rate = "44100"  format.channels = "2"  format.channel_map = "\"front-left,front-right\""
+	Corked: no
+	Mute: no
+	Volume: 0: 100% 1: 100%
+	        0: 0.00 dB 1: 0.00 dB
+	        balance 0.00
+	Buffer Latency: 44875 usec
+	Sink Latency: 24372 usec
+	Resample method: copy
+	Properties:
+		media.name = "AudioStream"
+		application.name = "CubebUtils"
+		native-protocol.peer = "UNIX socket client"
+		native-protocol.version = "28"
+		application.process.id = "3737"
+		application.process.user = "tsayen"
+		application.process.host = "dell-tolika"
+		application.process.binary = "firefox"
+		application.language = "en_US.UTF-8"
+		window.x11.display = ":0"
+		application.process.machine_id = "286ff4227d61a8af2c82b3f356917d9a"
+		application.process.session_id = "c2"
+		application.icon_name = "firefox"
+		module-stream-restore.id = "sink-input-by-application-name:CubebUtils"

@@ -16,6 +16,10 @@ module AudioSwitch
       self.class.parse_sinks(`pactl list sinks`)
     end
 
+    def inputs
+      self.class.parse_inputs(`pactl list inputs`)
+    end
+
     def subscribe(command = 'pactl subscribe')
       @pactl_sub = PTY.spawn(command)[0]
       begin
@@ -37,7 +41,7 @@ module AudioSwitch
       out.each_line do |line|
         case line
         when /Sink #/
-          sink = { id: line.sub(/Sink/, '').strip }
+          sink = { id: line.sub(/Sink #/, '').strip }
         when /Name:/
           sink[:name] = line.sub(/Name:/, '').strip
         when /Description:/
@@ -49,12 +53,18 @@ module AudioSwitch
       sinks
     end
 
+    def self.parse_inputs(out)
+      out.split("\n")
+         .select { |line| line =~ /^Sink Input #/ }
+         .map { |line| { id: line.match(/#(\d+)$/)[1] } }
+    end
+
     def self.parse_event(out_line)
       parts = out_line.split(' ')
       {
         type: parts[1].delete('\'').to_sym,
         object: parts[3].to_sym,
-        id: parts[4]
+        id: parts[4].sub('#', '')
       }
     end
   end
