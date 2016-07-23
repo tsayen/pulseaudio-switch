@@ -1,3 +1,5 @@
+require 'pty'
+
 module AudioSwitch
   class Pactl
     def start
@@ -12,6 +14,22 @@ module AudioSwitch
 
     def sinks
       self.class.parse_sinks(`pactl list sinks`)
+    end
+
+    def subscribe(command = 'pactl subscribe')
+      @pactl_sub_out, @pactl_sub_in = PTY.spawn(command)
+      begin
+        @pactl_sub_out.each do |line|
+          yield self.class.parse_event(line)
+        end
+      rescue Errno::EIO, IOError
+        return
+      end
+    end
+
+    def unsubscribe
+      @pactl_sub_out.close
+      @pactl_sub_in.close
     end
 
     def self.parse_sinks(out)
@@ -29,7 +47,6 @@ module AudioSwitch
           sink = nil
         end
       end
-
       sinks
     end
 

@@ -19,12 +19,18 @@ describe Pactl do
 
   describe 'pactl events' do
     it 'should parse events' do
-      events = [
-        "Event 'new' on sink-input #72",
-        "Event 'change' on sink #0",
-        "Event 'remove' on sink-input #60"
-      ].map do |line|
-        Pactl.parse_event(line)
+      command = ["Event 'new' on sink-input \"#72\"",
+                 "Event 'change' on sink \"#0\"",
+                 "Event 'remove' on sink-input \"#60\""]
+                .map { |line| "echo #{line}" }
+                .join('; ') + '; sleep 10s'
+
+      pactl = Pactl.new
+      events = []
+
+      pactl.subscribe(command) do |event|
+        events.push(event)
+        pactl.unsubscribe if events.size == 3
       end
 
       expect(events).to \
