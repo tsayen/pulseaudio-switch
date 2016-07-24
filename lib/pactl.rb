@@ -16,7 +16,7 @@ module AudioSwitch
     end
 
     def inputs
-      self.class.parse_inputs(`pactl list inputs`)
+      self.class.parse_inputs(`pactl list sink-inputs`)
     end
 
     def subscribe(command = 'pactl subscribe')
