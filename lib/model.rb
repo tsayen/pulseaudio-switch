@@ -11,7 +11,10 @@ module AudioSwitch
 
     def select_sink(sink_id)
       @current_sink = sink_id
-      puts sink_id
+      @pactl.default_sink = sink_id
+      @pactl.inputs.each do |input|
+        @pactl.move_input(input[:id], sink_id)
+      end
     end
 
     def sinks
