@@ -2,14 +2,13 @@ require 'pty'
 
 module AudioSwitch
   class Pactl
-    def start
-      parse_sinks.each @sink_added
+    def move_input(input_id, sink_id)
+      `pactl move-sink-input #{input_id} #{sink_id}`
     end
 
-    def move_input(input, sink)
-    end
-
-    def default_sink=(sink)
+    def default_sink=(sink_id)
+      # pactl doesn't have this command
+      `pacmd set-default-sink #{sink_id}`
     end
 
     def sinks
@@ -31,7 +30,7 @@ module AudioSwitch
       end
     end
 
-    def unsubscribe
+    def dispose
       @pactl_sub.close
     end
 

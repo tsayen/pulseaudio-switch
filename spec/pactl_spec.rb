@@ -35,7 +35,7 @@ describe Pactl do
 
     pactl.subscribe(command) do |event|
       events.push(event)
-      pactl.unsubscribe if events.size == 3
+      pactl.dispose if events.size == 3
     end
 
     expect(events).to \

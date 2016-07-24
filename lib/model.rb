@@ -1,8 +1,8 @@
 module AudioSwitch
   class Model
-    def initialize(pulse_audio)
+    def initialize(pactl)
       @sinks = {}
-      @pulse_audio = pulse_audio
+      @pactl = pactl
     end
 
     def watch(&block)
@@ -21,7 +21,7 @@ module AudioSwitch
     end
 
     def sinks
-      @pulse_audio.sinks
+      @pactl.sinks
     end
   end
 end
