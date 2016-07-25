@@ -2,9 +2,7 @@ module AudioSwitch
   class Model
     def initialize(pactl)
       @pactl = pactl
-      Thread.start do
-        pactl.subscribe { |event| handle(event) }
-      end
+      pactl.subscribe { |event| handle(event) }
     end
 
     def watch(&block)
