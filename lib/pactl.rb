@@ -23,7 +23,7 @@ module AudioSwitch
       @pactl_sub = PTY.spawn(command)[0]
       begin
         @pactl_sub.each do |line|
-          yield self.class.parse_event(line)
+          yield(self.class.parse_event(line))
         end
       rescue Errno::EIO, IOError
         return

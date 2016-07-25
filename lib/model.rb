@@ -2,6 +2,7 @@ module AudioSwitch
   class Model
     def initialize(pactl)
       @pactl = pactl
+      pactl.subscribe { |event| handle(event) }
     end
 
     def watch(&block)
@@ -20,6 +21,12 @@ module AudioSwitch
 
     def sinks
       @pactl.sinks
+    end
+
+    private
+
+    def handle(event)
+      @update.call if event[:object] == :sink
     end
   end
 end
