@@ -1,4 +1,5 @@
 require 'pactl.rb'
+require 'rspec/wait'
 
 Pactl = AudioSwitch::Pactl
 describe Pactl do
@@ -38,7 +39,7 @@ describe Pactl do
       pactl.dispose if events.size == 3
     end
 
-    expect(events).to \
+    wait_for(events).to \
       eql([{
             type:  :new,
             object: :'sink-input',
