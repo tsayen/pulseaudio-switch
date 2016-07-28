@@ -10,7 +10,8 @@ describe Pactl do
       eql([{
             id: '0',
             name: 'alsa_output.pci-0000_00_1b.0.analog-stereo',
-            description: 'Built-in Audio Analog Stereo'
+            description: 'Built-in Audio Analog Stereo',
+            default: true
           }, {
             id: '1',
             name: 'rtp',
