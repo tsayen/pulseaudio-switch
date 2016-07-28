@@ -24,10 +24,16 @@ describe Pactl do
     expect(inputs).to eql([{ id: '100' }, { id: '104' }])
   end
 
+  it 'should parse pactl stat' do
+    default_sink = Pactl.parse_default_sink(File.read('spec/resources/pactl_stat'))
+
+    expect(default_sink).to eql('alsa_output.pci-0000_00_1b.0.analog-stereo')
+  end
+
   it 'should notify of events' do
-    command = ["Event 'new' on sink-input \"#72\"",
-               "Event 'change' on sink \"#0\"",
-               "Event 'remove' on sink-input \"#60\""]
+    command = ["Event 'new' on sink-input '#72'",
+               "Event 'change' on sink '#0'",
+               "Event 'remove' on sink-input '#60'"]
               .map { |line| "echo #{line}" }
               .join('; ') + '; sleep 10s'
 

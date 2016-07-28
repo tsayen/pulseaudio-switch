@@ -11,6 +11,10 @@ module AudioSwitch
       `pacmd set-default-sink #{sink_id}`
     end
 
+    def default_sink
+      self.class.parse_default_sink(`pactl stat`)
+    end
+
     def sinks
       self.class.parse_sinks(`pactl list sinks`)
     end
@@ -67,6 +71,10 @@ module AudioSwitch
         object: parts[3].to_sym,
         id: parts[4].sub('#', '')
       }
+    end
+
+    def self.parse_default_sink(out)
+      out.match(/^Default Sink: (.*?)\n/)[1]
     end
   end
 end

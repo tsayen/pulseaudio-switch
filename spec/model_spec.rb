@@ -1,19 +1,6 @@
 require 'model.rb'
 
 describe AudioSwitch::Model do
-  xit 'should get sinks from pulseaudio' do
-    # given
-    sinks = [{ id: 'sink0', title: 'Sink 0', active: false },
-             { id: 'sink1', title: 'Sink 1', active: true }]
-    pactl = instance_double('AudioSwitch::Pactl',
-                            sinks: sinks)
-    # when
-    model = AudioSwitch::Model.new(pactl)
-    # then
-    expect(pactl).to have_received(:sinks).once
-    expect(model.sinks).to equal(sinks)
-  end
-
   it 'should set default sink' do
     # given
     inputs = [{ id: 0 }, { id: 1 }]
