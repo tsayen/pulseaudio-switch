@@ -11,12 +11,9 @@ module AudioSwitch
       `pacmd set-default-sink #{sink_id}`
     end
 
-    def default_sink
-      self.class.parse_default_sink(`pactl stat`)
-    end
-
     def sinks
-      self.class.parse_sinks(`pactl list sinks`)
+      default_sink_name = self.class.parse_default_sink(`pactl stat`)
+      self.class.parse_sinks(`pactl list sinks`, default_sink_name)
     end
 
     def inputs
@@ -40,17 +37,18 @@ module AudioSwitch
       @pactl_sub.close
     end
 
-    def self.parse_sinks(out)
+    def self.parse_sinks(out, default_sink_name)
       sinks = []
       sink = nil
       out.each_line do |line|
         case line
         when /Sink #/
-          sink = { id: line.sub(/Sink #/, '').strip }
+          sink = { id: line.match(/Sink #(\d+)$/)[1] }
         when /Name:/
-          sink[:name] = line.sub(/Name:/, '').strip
+          sink[:name] = line.match(/Name:\s*(.*?)\s*$/)[1]
+          sink[:default] = true if sink[:name] == default_sink_name
         when /Description:/
-          sink[:description] = line.sub(/Description:/, '').strip
+          sink[:description] = line.match(/Description:\s*(.*?)\s*$/)[1]
           sinks << sink
           sink = nil
         end

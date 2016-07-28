@@ -4,7 +4,8 @@ require 'rspec/wait'
 Pactl = AudioSwitch::Pactl
 describe Pactl do
   it 'should parse pactl sinks output' do
-    sinks = Pactl.parse_sinks(File.read('spec/resources/pactl_list_sinks'))
+    sinks = Pactl.parse_sinks(File.read('spec/resources/pactl_list_sinks'),
+                              'alsa_output.pci-0000_00_1b.0.analog-stereo')
 
     expect(sinks).to \
       eql([{

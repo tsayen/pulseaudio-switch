@@ -43,7 +43,7 @@ module AudioSwitch
       item.signal_connect('toggled') do
         @model.select_sink(sink[:id]) if item.active?
       end
-      item.set_active(sink[:active])
+      item.set_active(sink[:default])
       item
     end
 
