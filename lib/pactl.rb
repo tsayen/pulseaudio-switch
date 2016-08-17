@@ -74,5 +74,21 @@ module AudioSwitch
     def self.parse_default_sink(out)
       out.match(/^Default Sink: (.*?)\n/)[1]
     end
+
+    def self.parse_modules(out)
+      modules = []
+      mod = nil
+      out.each_line do |line|
+        case line
+        when /Module #/
+          mod = {}
+        when /Name:/
+          mod[:name] = line.match(/Name:\s*(.*?)\s*$/)[1]
+          modules << mod
+          mod = nil
+        end
+      end
+      modules
+    end
   end
 end

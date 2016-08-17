@@ -32,6 +32,12 @@ describe Pactl do
     expect(default_sink).to eql('alsa_output.pci-0000_00_1b.0.analog-stereo')
   end
 
+  it 'should parse pactl modules' do
+    modules = Pactl.parse_modules(File.read('spec/resources/pactl_list_modules'))
+
+    expect(modules).to include(name: 'module-rtp-send')
+  end
+
   it 'should notify of events' do
     command = ["Event 'new' on sink-input '#72'",
                "Event 'change' on sink '#0'",
