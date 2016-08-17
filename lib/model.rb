@@ -1,6 +1,7 @@
 module AudioSwitch
   class Model
     MODULE_RTP_SEND = 'module-rtp-send'.freeze
+    MODULE_NULL_SINK = 'module-null-sink'.freeze
     RTP = 'rtp'.freeze
 
     def initialize(pactl)
@@ -29,6 +30,26 @@ module AudioSwitch
       return false unless @pactl.modules.any? { |mod| mod[:name] == MODULE_RTP_SEND }
       return false unless @pactl.sinks.any? { |sink| sink[:name] == RTP }
       true
+    end
+
+    def rtp_on
+      @pactl.load_module(
+        "#{MODULE_RTP_SEND} \
+         sink_name=rtp \
+         format=s16be \
+         channels=2 \
+         rate=44100 \
+         sink_properties=\\\"device.description=\\\'RTP sender\\\' device.bus=\\\'network\\\' device.icon_name=\\\'network-server\\\'\\\""
+      )
+      @pactl.load_module(
+        "#{MODULE_NULL_SINK} \
+         source=rtp.monitor"
+      )
+    end
+
+    def rtp_off
+      @pactl.unload_module(MODULE_RTP_SEND)
+      @pactl.unload_module(MODULE_NULL_SINK)
     end
 
     private

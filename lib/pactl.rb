@@ -24,6 +24,10 @@ module AudioSwitch
       self.class.parse_modules(`pactl list modules`)
     end
 
+    def load_module(name)
+      
+    end
+
     def subscribe(command = 'pactl subscribe')
       Thread.start do
         @pactl_sub = PTY.spawn(command)[0]
