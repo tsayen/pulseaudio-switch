@@ -61,4 +61,35 @@ describe AudioSwitch::Model do
     # then
     expect(events).to eql(0)
   end
+
+  it 'should tell whether rtp is on or off' do
+    # given
+    def model(modules, sinks)
+      pactl = instance_double('AudioSwitch::Pactl',
+                              subscribe: nil,
+                              modules: modules,
+                              sinks: sinks)
+      AudioSwitch::Model.new(pactl)
+    end
+    # then
+    expect(model(
+      [{ name: 'module-rtp-send' }],
+      [{ name: 'rtp' }]
+    ).rtp_on?).to be_truthy
+
+    expect(model(
+      [],
+      [{ name: 'rtp' }]
+    ).rtp_on?).to be_falsey
+
+    expect(model(
+      [{ name: 'module-rtp-send' }],
+      []
+    ).rtp_on?).to be_falsey
+
+    expect(model(
+      [{ name: 'module-stream-restore' }],
+      [{ name: 'rtp' }]
+    ).rtp_on?).to be_falsey
+  end
 end
