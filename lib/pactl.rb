@@ -24,10 +24,8 @@ module AudioSwitch
       self.class.parse_modules(`pactl list modules`)
     end
 
-    def load_module(mod)
-      cmd = "pactl load-module #{mod}"
-      puts cmd
-      `#{cmd}`
+    def load_module(mod, options = {})
+      `pactl load-module #{mod} #{self.class.format_module_opts(options)}`
     end
 
     def unload_module(mod)
@@ -49,6 +47,19 @@ module AudioSwitch
 
     def dispose
       @pactl_sub.close
+    end
+
+    def self.format_module_opts(opts, quote = '')
+      result = ''
+      opts.each_pair do |key, value|
+        result += ' ' unless result.empty?
+        result += if value.is_a? Hash
+                    "#{key}=\\\"#{format_module_opts(value, '\\\'')}\\\""
+                  else
+                    "#{key}=#{quote}#{value}#{quote}"
+                  end
+      end
+      result
     end
 
     def self.parse_sinks(out, default_sink_name)

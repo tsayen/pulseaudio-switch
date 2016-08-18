@@ -68,4 +68,12 @@ describe Pactl do
             id: '60'
           }])
   end
+
+  it 'should format module options' do
+    options1 = { 'name' => 'rtp', 'channels' => '2' }
+    options2 = { 'name' => 'rtp', 'options' => { 'description' => 'RTP' } }
+
+    expect(Pactl.format_module_opts(options1)).to eql('name=rtp channels=2')
+    expect(Pactl.format_module_opts(options2)).to eql("name=rtp options=\\\"description=\\\'RTP\\\'\\\"")
+  end
 end

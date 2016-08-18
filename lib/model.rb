@@ -34,18 +34,16 @@ module AudioSwitch
 
     def rtp_on
       # see https://cgit.freedesktop.org/pulseaudio/paprefs/tree/src/paprefs.cc
-      @pactl.load_module(
-        "#{MODULE_NULL_SINK} \
-         sink_name=rtp \
-         format=s16be \
-         channels=2 \
-         rate=44100 \
-         sink_properties=\\\"device.description=\\\'RTP sender\\\' device.bus=\\\'network\\\' device.icon_name=\\\'network-server\\\'\\\""
-      )
-      @pactl.load_module(
-        "#{MODULE_RTP_SEND} \
-         source=rtp.monitor"
-      )
+      @pactl.load_module(MODULE_NULL_SINK, 'sink_name' => 'rtp',
+                                           'format' => 's16be',
+                                           'channels' => '2',
+                                           'rate' => '44100',
+                                           'sink_properties' => {
+                                             'device.description' => 'RTP sender',
+                                             'device.bus' => 'network',
+                                             'device.icon_name' => 'network-server'
+                                           })
+      @pactl.load_module(MODULE_RTP_SEND, 'source' => 'rtp.monitor')
     end
 
     def rtp_off
