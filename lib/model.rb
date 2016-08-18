@@ -6,6 +6,7 @@ module AudioSwitch
 
     def initialize(pactl)
       @pactl = pactl
+      @current_sink = (pactl.sinks.find { |sink| sink[:default] } || {})[:id]
       pactl.subscribe { |event| handle(event) }
     end
 
