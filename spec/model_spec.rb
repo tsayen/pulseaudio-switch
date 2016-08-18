@@ -95,23 +95,21 @@ describe AudioSwitch::Model do
 
   it 'should turn rtp on' do
     # given
-    pactl = spy('AudioSwitch::Pactl', subscribe: nil)
+    pactl = instance_double('AudioSwitch::Pactl', subscribe: nil)
     model = AudioSwitch::Model.new(pactl)
+    expect(pactl).to receive(:load_module).with(/module-rtp-send/)
+    expect(pactl).to receive(:load_module).with(/module-null-sink/)
     # when
     model.rtp_on
-    # then
-    expect(pactl).to have_received(:load_module).with(/module-rtp-send/)
-    expect(pactl).to have_received(:load_module).with(/module-null-sink/)
   end
 
   it 'should turn rtp off' do
     # given
-    pactl = spy('AudioSwitch::Pactl', subscribe: nil)
+    pactl = instance_double('AudioSwitch::Pactl', subscribe: nil)
     model = AudioSwitch::Model.new(pactl)
+    expect(pactl).to receive(:unload_module).with(/module-rtp-send/)
+    expect(pactl).to receive(:unload_module).with(/module-null-sink/)
     # when
     model.rtp_off
-    # then
-    expect(pactl).to have_received(:unload_module).with(/module-rtp-send/)
-    expect(pactl).to have_received(:unload_module).with(/module-null-sink/)
   end
 end

@@ -30,6 +30,7 @@ module AudioSwitch
     def draw(sinks)
       clear
       sinks.each { |sink| add new_item(sink) }
+      add new_rtp_toggle
     end
 
     def add(item)
@@ -45,6 +46,19 @@ module AudioSwitch
       end
       item.set_active(sink[:default])
       item
+    end
+
+    def new_rtp_toggle
+      toggle = Gtk::CheckMenuItem.new('Enable RTP sender')
+      toggle.active = @model.rtp_on?
+      toggle.signal_connect('toggled') do
+        if toggle.active?
+          @model.rtp_on
+        else
+          @model.rtp_off
+        end
+      end
+      toggle
     end
 
     def clear

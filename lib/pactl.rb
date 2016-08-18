@@ -24,8 +24,14 @@ module AudioSwitch
       self.class.parse_modules(`pactl list modules`)
     end
 
-    def load_module(name)
-      
+    def load_module(mod)
+      cmd = "pactl load-module #{mod}"
+      puts cmd
+      `#{cmd}`
+    end
+
+    def unload_module(mod)
+      `pactl unload-module #{mod}`
     end
 
     def subscribe(command = 'pactl subscribe')
