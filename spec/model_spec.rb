@@ -97,8 +97,8 @@ describe AudioSwitch::Model do
     # given
     pactl = instance_double('AudioSwitch::Pactl', subscribe: nil)
     model = AudioSwitch::Model.new(pactl)
-    expect(pactl).to receive(:load_module).with(/module-rtp-send/)
-    expect(pactl).to receive(:load_module).with(/module-null-sink/)
+    expect(pactl).to receive(:load_module).with('module-rtp-send', any_args)
+    expect(pactl).to receive(:load_module).with('module-null-sink', any_args)
     # when
     model.rtp_on
   end
@@ -107,8 +107,8 @@ describe AudioSwitch::Model do
     # given
     pactl = instance_double('AudioSwitch::Pactl', subscribe: nil)
     model = AudioSwitch::Model.new(pactl)
-    expect(pactl).to receive(:unload_module).with(/module-rtp-send/)
-    expect(pactl).to receive(:unload_module).with(/module-null-sink/)
+    expect(pactl).to receive(:unload_module).with('module-rtp-send')
+    expect(pactl).to receive(:unload_module).with('module-null-sink')
     # when
     model.rtp_off
   end

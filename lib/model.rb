@@ -6,7 +6,6 @@ module AudioSwitch
 
     def initialize(pactl)
       @pactl = pactl
-      @current_sink = (pactl.sinks.find { |sink| sink[:default] } || {})[:id]
       pactl.subscribe { |event| handle(event) }
     end
 
@@ -42,12 +41,13 @@ module AudioSwitch
         'channels' => '2',
         'rate' => '44100',
         'sink_properties' => {
-          'device.description' => 'RTP sender',
+          'device.description' => 'RTP Multicast',
           'device.bus' => 'network',
           'device.icon_name' => 'network-server'
         }
       )
       @pactl.load_module(MODULE_RTP_SEND, 'source' => 'rtp.monitor')
+      # current_sink = (@pactl.sinks.find { |sink| sink[:default] } || {})[:id]
     end
 
     def rtp_off
