@@ -30,6 +30,7 @@ module AudioSwitch
     def draw(sinks)
       clear
       sinks.each { |sink| add new_item(sink) }
+      add new_separator
       add new_rtp_toggle
     end
 
@@ -49,7 +50,7 @@ module AudioSwitch
     end
 
     def new_rtp_toggle
-      toggle = Gtk::CheckMenuItem.new('Enable RTP sender')
+      toggle = Gtk::CheckMenuItem.new('Enable RTP')
       toggle.active = @model.rtp_on?
       toggle.signal_connect('toggled') do
         if toggle.active?
@@ -59,6 +60,10 @@ module AudioSwitch
         end
       end
       toggle
+    end
+
+    def new_separator
+      Gtk::SeparatorMenuItem.new
     end
 
     def clear
