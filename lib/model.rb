@@ -46,7 +46,7 @@ module AudioSwitch
         }
       )
       @pactl.load_module(MODULE_RTP_SEND, 'source' => 'rtp.monitor')
-      @pactl.default_sink = default_sink
+      select_sink(default_sink)
     end
 
     def rtp_off

@@ -99,6 +99,7 @@ describe AudioSwitch::Model do
                             subscribe: nil,
                             sinks: [{ id: 1, name: 'rtp' },
                                     { id: 2, name: 'analog', default: true }],
+                            inputs: [],
                             load_module: nil,
                             :'default_sink=' => nil)
     model = AudioSwitch::Model.new(pactl)
