@@ -15,7 +15,6 @@ module AudioSwitch
     end
 
     def select_sink(sink_id)
-      @current_sink = sink_id
       @pactl.default_sink = sink_id
       @pactl.inputs.each do |input|
         @pactl.move_input(input[:id], sink_id)
@@ -27,8 +26,8 @@ module AudioSwitch
     end
 
     def rtp_on?
-      return false unless @pactl.modules.any? { |mod| mod[:name] == MODULE_RTP_SEND }
       return false unless @pactl.sinks.any? { |sink| sink[:name] == RTP }
+      return false unless @pactl.modules.any? { |mod| mod[:name] == MODULE_RTP_SEND }
       true
     end
 
@@ -47,7 +46,7 @@ module AudioSwitch
         }
       )
       @pactl.load_module(MODULE_RTP_SEND, 'source' => 'rtp.monitor')
-      # current_sink = (@pactl.sinks.find { |sink| sink[:default] } || {})[:id]
+      @pactl.default_sink = default_sink
     end
 
     def rtp_off
@@ -59,6 +58,10 @@ module AudioSwitch
 
     def handle(event)
       @update.call if event[:object] == :sink
+    end
+
+    def default_sink
+      (@pactl.sinks.find { |sink| sink[:default] } || {})[:id]
     end
   end
 end

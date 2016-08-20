@@ -95,21 +95,31 @@ describe AudioSwitch::Model do
 
   it 'should turn rtp on' do
     # given
-    pactl = instance_double('AudioSwitch::Pactl', subscribe: nil)
+    pactl = instance_double('AudioSwitch::Pactl',
+                            subscribe: nil,
+                            sinks: [{ id: 1, name: 'rtp' },
+                                    { id: 2, name: 'analog', default: true }],
+                            load_module: nil,
+                            :'default_sink=' => nil)
     model = AudioSwitch::Model.new(pactl)
-    expect(pactl).to receive(:load_module).with('module-rtp-send', any_args)
-    expect(pactl).to receive(:load_module).with('module-null-sink', any_args)
     # when
     model.rtp_on
+    # then
+    expect(pactl).to have_received(:load_module).with('module-rtp-send', any_args)
+    expect(pactl).to have_received(:load_module).with('module-null-sink', any_args)
+    expect(pactl).to have_received(:default_sink=).with(2)
   end
 
   it 'should turn rtp off' do
     # given
-    pactl = instance_double('AudioSwitch::Pactl', subscribe: nil)
+    pactl = instance_double('AudioSwitch::Pactl',
+                            subscribe: nil,
+                            unload_module: nil)
     model = AudioSwitch::Model.new(pactl)
-    expect(pactl).to receive(:unload_module).with('module-rtp-send')
-    expect(pactl).to receive(:unload_module).with('module-null-sink')
     # when
     model.rtp_off
+    # then
+    expect(pactl).to have_received(:unload_module).with('module-rtp-send')
+    expect(pactl).to have_received(:unload_module).with('module-null-sink')
   end
 end
