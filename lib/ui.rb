@@ -11,6 +11,10 @@ module AudioSwitch
       subscribe
     end
 
+    def show
+      Gtk.main
+    end
+
     private
 
     def add_to_tray
