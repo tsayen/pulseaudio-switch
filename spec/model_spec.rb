@@ -103,7 +103,9 @@ describe AudioSwitch::Model do
                                     { id: 2, name: 'analog', default: true }],
                             inputs: [],
                             load_module: nil,
-                            :'default_sink=' => nil)
+                            :'default_sink=' => nil,
+                            sources: [{ id: 10 }],
+                            mute_source: nil)
     model = AudioSwitch::Model.new(pactl)
     # when
     model.rtp_on
@@ -111,6 +113,7 @@ describe AudioSwitch::Model do
     expect(pactl).to have_received(:load_module).with('module-rtp-send', any_args)
     expect(pactl).to have_received(:load_module).with('module-null-sink', any_args)
     expect(pactl).to have_received(:default_sink=).with(2)
+    expect(pactl).to have_received(:mute_source).with(10)
   end
 
   it 'should turn rtp off' do

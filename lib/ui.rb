@@ -68,8 +68,9 @@ module AudioSwitch
     end
 
     def new_mute_toggle
-      toggle = Gtk::CheckMenuItem.new('Mute inputs')
+      toggle = Gtk::CheckMenuItem.new('Mute Inputs')
       toggle.active = @model.sources_mute?
+      toggle.sensitive = !@model.rtp_on?
       toggle.signal_connect('toggled') do
         if toggle.active?
           @model.mute_sources

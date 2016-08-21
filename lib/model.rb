@@ -32,6 +32,7 @@ module AudioSwitch
     end
 
     def rtp_on
+      mute_sources
       # see https://cgit.freedesktop.org/pulseaudio/paprefs/tree/src/paprefs.cc
       @pactl.load_module(
         MODULE_NULL_SINK,
