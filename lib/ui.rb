@@ -7,11 +7,11 @@ module AudioSwitch
       @model = model
       @menu = Gtk::Menu.new
       @items = []
-      add_to_tray
-      subscribe
     end
 
-    def show
+    def start
+      add_to_tray
+      subscribe
       Gtk.main
     end
 

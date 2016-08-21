@@ -10,7 +10,7 @@ def main
   pactl = AudioSwitch::Pactl.new
   model = AudioSwitch::Model.new(pactl)
   ui = AudioSwitch::UI.new(model)
-  ui.show
+  ui.start
 end
 
 begin

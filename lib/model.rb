@@ -6,12 +6,11 @@ module AudioSwitch
 
     def initialize(pactl)
       @pactl = pactl
-      pactl.subscribe { |event| handle(event) }
     end
 
     def watch(&block)
-      @update = block
-      @update.call
+      @pactl.subscribe { |event| handle(event, block) }
+      yield
     end
 
     def select_sink(sink_id)
@@ -74,9 +73,9 @@ module AudioSwitch
 
     private
 
-    def handle(event)
-      @update.call if event[:object] == :sink ||
-                      event[:object] == :source
+    def handle(event, block)
+      block.call if event[:object] == :sink ||
+                    event[:object] == :source
     end
 
     def default_sink
