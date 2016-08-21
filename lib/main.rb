@@ -2,9 +2,9 @@
 require 'rubygems'
 require 'bundler/setup'
 
-require_relative 'ui.rb'
-require_relative 'model.rb'
 require_relative 'pactl.rb'
+require_relative 'model.rb'
+require_relative 'ui.rb'
 
 def main
   pactl = AudioSwitch::Pactl.new
