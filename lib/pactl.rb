@@ -25,7 +25,7 @@ module AudioSwitch
     end
 
     def load_module(mod, options = {})
-      `pactl load-module #{mod} #{self.class.format_module_opts(options)}`
+      `pactl load-module #{mod} #{ModuleOptions.new(options)}`
     end
 
     def unload_module(mod)
@@ -37,7 +37,7 @@ module AudioSwitch
         @pactl_sub = PTY.spawn(command)[0]
         begin
           @pactl_sub.each do |line|
-            yield(self.class.parse_event(line))
+            yield(Out.new(line).parse_event)
           end
         rescue Errno::EIO, IOError
           return
@@ -49,107 +49,119 @@ module AudioSwitch
       @pactl_sub.close
     end
 
-    def self.format_module_opts(opts, quote = '')
-      result = ''
-      opts.each_pair do |key, value|
-        result += ' ' unless result.empty?
-        result += if value.is_a? Hash
-                    "#{key}=\\\"#{format_module_opts(value, '\\\'')}\\\""
-                  else
-                    "#{key}=#{quote}#{value}#{quote}"
-                  end
-      end
-      result
-    end
-
     def self.parse_sinks(out, default_sink_name)
-      PactlOut.new(
+      Out.new(out).parse_objects(
         [
           { marker: 'Sink #', property: :id },
           { marker: 'Name:', property: :name },
           { marker: 'Description:', property: :description }
         ]
-      ).parse(out).each { |sink| sink[:default] = true if sink[:name] == default_sink_name }
+      ).each { |sink| sink[:default] = true if sink[:name] == default_sink_name }
     end
 
     def self.parse_inputs(out)
-      PactlOut.new(
+      Out.new(out).parse_objects(
         [
           { marker: 'Sink Input #', property: :id }
         ]
-      ).parse(out)
-    end
-
-    def self.parse_event(out_line)
-      parts = out_line.split(' ')
-      {
-        type: parts[1].delete('\'').to_sym,
-        object: parts[3].to_sym,
-        id: parts[4].sub('#', '')
-      }
-    end
-
-    def self.parse_default_sink(out)
-      out.match(/^Default Sink: (.*?)\n/)[1]
+      )
     end
 
     def self.parse_modules(out)
-      PactlOut.new(
+      Out.new(out).parse_objects(
         [
           { marker: 'Module #' },
           { marker: 'Name:', property: :name }
         ]
-      ).parse(out)
+      )
     end
 
     def self.parse_sources(out)
-      PactlOut.new(
+      Out.new(out).parse_objects(
         [
           { marker: 'Source #', property: :id },
           { marker: 'Mute:', property: :mute }
         ]
-      ).parse(out).each { |source| source[:mute] = source[:mute] == 'yes' }
+      ).each { |source| source[:mute] = source[:mute] == 'yes' }
     end
 
-    def self.read_name(line)
-      read_property(line, 'Name:')
+    def self.parse_default_sink(out)
+      Out.new(out).parse_property('Default Sink:')
     end
 
-    class PactlOut
-      def initialize(fields)
-        @fields = fields
+    class Out
+      def initialize(string)
+        @string = string
       end
 
-      def parse(string)
-        results = []
+      def parse_objects(fields)
+        objects = []
         field_id = 0
-        result = nil
+        object = nil
 
-        string.each_line do |line|
-          field = @fields[field_id]
+        @string.each_line do |line|
+          field = fields[field_id]
           next unless line =~ Regexp.new(field[:marker])
 
-          result = {} if field_id == 0
-          update(result, line, field)
+          object = {} if field_id == 0
+          update(object, line, field)
 
           field_id += 1
-          next unless field_id == @fields.size
+          next unless field_id == fields.size
 
-          results << result
-          result = nil
+          objects << object
+          object = nil
           field_id = 0
         end
 
-        results
+        objects
       end
 
-      def update(result, line, field)
+      def parse_event
+        parts = @string.split(' ')
+        {
+          type: parts[1].delete('\'').to_sym,
+          object: parts[3].to_sym,
+          id: parts[4].sub('#', '')
+        }
+      end
+
+      def parse_property(marker)
+        read_property(@string, marker)
+      end
+
+      private
+
+      def update(object, line, field)
         property = field[:property]
-        result[property] = read_property(line, field[:marker]) if field[:property]
+        object[property] = read_property(line, field[:marker]) if field[:property]
       end
 
       def read_property(line, marker)
         line.match(Regexp.new("#{marker}\\s*(.*?)\\s*$"))[1]
+      end
+    end
+
+    class ModuleOptions
+      def initialize(options)
+        @options = options
+      end
+
+      def to_s
+        format(@options)
+      end
+
+      def format(opts, quote = '')
+        result = ''
+        opts.each_pair do |key, value|
+          result += ' ' unless result.empty?
+          result += if value.is_a? Hash
+                      "#{key}=\\\"#{format(value, '\\\'')}\\\""
+                    else
+                      "#{key}=#{quote}#{value}#{quote}"
+                    end
+        end
+        result
       end
     end
   end
