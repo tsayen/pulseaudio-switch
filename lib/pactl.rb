@@ -63,28 +63,21 @@ module AudioSwitch
     end
 
     def self.parse_sinks(out, default_sink_name)
-      sinks = []
-      sink = nil
-      out.each_line do |line|
-        case line
-        when /Sink #/
-          sink = { id: read_id(line) }
-        when /Name:/
-          sink[:name] = read_name(line)
-          sink[:default] = true if sink[:name] == default_sink_name
-        when /Description:/
-          sink[:description] = read_property(line, 'Description:')
-          sinks << sink
-          sink = nil
-        end
-      end
-      sinks
+      PactlOut.new(
+        [
+          { marker: /Sink #/, property: :id },
+          { marker: /Name:/, property: :name },
+          { marker: /Description:/, property: :description }
+        ]
+      ).parse(out).each { |sink| sink[:default] = true if sink[:name] == default_sink_name }
     end
 
     def self.parse_inputs(out)
-      out.split("\n")
-         .select { |line| line =~ /^Sink Input #/ }
-         .map { |line| { id: read_id(line) } }
+      PactlOut.new(
+        [
+          { marker: /Sink Input #/, property: :id }
+        ]
+      ).parse(out)
     end
 
     def self.parse_event(out_line)
@@ -101,47 +94,63 @@ module AudioSwitch
     end
 
     def self.parse_modules(out)
-      modules = []
-      mod = nil
-      out.each_line do |line|
-        case line
-        when /Module #/
-          mod = {}
-        when /Name:/
-          mod[:name] = read_name(line)
-          modules << mod
-          mod = nil
-        end
-      end
-      modules
+      PactlOut.new(
+        [
+          { marker: /Module #/ },
+          { marker: /Name:/, property: :name }
+        ]
+      ).parse(out)
     end
 
     def self.parse_sources(out)
-      sources = []
-      source = nil
-      out.each_line do |line|
-        case line
-        when /Source #/
-          source = { id: read_id(line) }
-        when /Mute:/
-          source[:mute] = (read_property(line, 'Mute:') == 'yes')
-          sources << source
-          source = nil
-        end
-      end
-      sources
-    end
-
-    def self.read_id(line)
-      read_property(line, '#')
+      PactlOut.new(
+        [
+          { marker: /Source #/, property: :id },
+          { marker: /Mute:/, property: :mute }
+        ]
+      ).parse(out).each { |source| source[:mute] = source[:mute] == 'yes' }
     end
 
     def self.read_name(line)
       read_property(line, 'Name:')
     end
 
-    def self.read_property(line, label)
-      line.match(Regexp.new("#{label}\\s*(.*?)\\s*$"))[1]
+    class PactlOut
+      def initialize(fields)
+        @fields = fields
+      end
+
+      def parse(string)
+        results = []
+        field_id = 0
+        result = nil
+
+        string.each_line do |line|
+          field = @fields[field_id]
+          next unless line =~ field[:marker]
+
+          result = {} if field_id == 0
+          update(result, line, field)
+
+          field_id += 1
+          next unless field_id == @fields.size
+
+          results << result
+          result = nil
+          field_id = 0
+        end
+
+        results
+      end
+
+      def update(result, line, field)
+        property = field[:property]
+        result[property] = read_property(line, field[:marker]) if field[:property]
+      end
+
+      def read_property(line, marker)
+        line.match(Regexp.new("#{marker}\\s*(.*?)\\s*$"))[1]
+      end
     end
   end
 end
