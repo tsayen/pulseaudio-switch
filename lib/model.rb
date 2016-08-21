@@ -54,10 +54,27 @@ module AudioSwitch
       @pactl.unload_module(MODULE_NULL_SINK)
     end
 
+    def mute_sources
+      @pactl.sources.each do |source|
+        @pactl.mute_source(source[:id])
+      end
+    end
+
+    def unmute_sources
+      @pactl.sources.each do |source|
+        @pactl.unmute_source(source[:id])
+      end
+    end
+
+    def sources_mute?
+      @pactl.sources.all? { |source| source[:mute] }
+    end
+
     private
 
     def handle(event)
-      @update.call if event[:object] == :sink
+      @update.call if event[:object] == :sink ||
+                      event[:object] == :source
     end
 
     def default_sink

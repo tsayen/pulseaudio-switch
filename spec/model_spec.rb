@@ -30,7 +30,7 @@ describe AudioSwitch::Model do
     expect(events).to eql(1)
   end
 
-  it 'should notify when sink event received' do
+  it 'should notify when sink or source event received' do
     # given
     events = -1
     event = nil
@@ -42,8 +42,10 @@ describe AudioSwitch::Model do
     event.call(type: :new, object: :sink, id: 1)
     event.call(type: :change, object: :sink, id: 1)
     event.call(type: :remove, object: :sink, id: 1)
+    event.call(type: :new, object: :source, id: 1)
+    event.call(type: :change, object: :source, id: 1)
     # then
-    expect(events).to eql(3)
+    expect(events).to eql(5)
   end
 
   it 'should not notify when other events received' do
@@ -122,5 +124,62 @@ describe AudioSwitch::Model do
     # then
     expect(pactl).to have_received(:unload_module).with('module-rtp-send')
     expect(pactl).to have_received(:unload_module).with('module-null-sink')
+  end
+
+  it 'should mute sources' do
+    # given
+    pactl = instance_double('AudioSwitch::Pactl',
+                            subscribe: nil,
+                            mute_source: nil,
+                            sources: [{ id: '1' }, { id: '2' }])
+    model = AudioSwitch::Model.new(pactl)
+    # when
+    model.mute_sources
+    # then
+    expect(pactl).to have_received(:mute_source).with('1')
+    expect(pactl).to have_received(:mute_source).with('2')
+  end
+
+  it 'should unmute sources' do
+    # given
+    pactl = instance_double('AudioSwitch::Pactl',
+                            subscribe: nil,
+                            unmute_source: nil,
+                            sources: [{ id: '1' }, { id: '2' }])
+    model = AudioSwitch::Model.new(pactl)
+    # when
+    model.unmute_sources
+    # then
+    expect(pactl).to have_received(:unmute_source).with('1')
+    expect(pactl).to have_received(:unmute_source).with('2')
+  end
+
+  it 'should tell whether sources are mute' do
+    # given
+    def model(sources)
+      pactl = instance_double('AudioSwitch::Pactl',
+                              subscribe: nil,
+                              sources: sources)
+      AudioSwitch::Model.new(pactl)
+    end
+    # then
+    expect(model(
+      [{ mute: true },
+       { mute: true }]
+    ).sources_mute?).to be_truthy
+
+    expect(model(
+      [{ mute: false },
+       { mute: true }]
+    ).sources_mute?).to be_falsey
+
+    expect(model(
+      [{ mute: false },
+       { mute: false }]
+    ).sources_mute?).to be_falsey
+
+    expect(model(
+      []
+    ).sources_mute?).to be_truthy
   end
 end

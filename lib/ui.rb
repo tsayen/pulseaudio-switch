@@ -36,6 +36,7 @@ module AudioSwitch
       sinks.each { |sink| add new_item(sink) }
       add new_separator
       add new_rtp_toggle
+      add new_mute_toggle
     end
 
     def add(item)
@@ -61,6 +62,19 @@ module AudioSwitch
           @model.rtp_on
         else
           @model.rtp_off
+        end
+      end
+      toggle
+    end
+
+    def new_mute_toggle
+      toggle = Gtk::CheckMenuItem.new('Mute inputs')
+      toggle.active = @model.sources_mute?
+      toggle.signal_connect('toggled') do
+        if toggle.active?
+          @model.mute_sources
+        else
+          @model.unmute_sources
         end
       end
       toggle

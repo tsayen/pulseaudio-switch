@@ -24,6 +24,10 @@ module AudioSwitch
       self.class.parse_modules(`pactl list modules`)
     end
 
+    def sources
+      self.class.parse_sources(`pactl list sources`)
+    end
+
     def load_module(mod, options = {})
       `pactl load-module #{mod} #{ModuleOptions.new(options)}`
     end
@@ -43,6 +47,14 @@ module AudioSwitch
           return
         end
       end
+    end
+
+    def mute_source(source_id)
+      `pactl set-source-mute #{source_id} true`
+    end
+
+    def unmute_source(source_id)
+      `pactl set-source-mute #{source_id} false`
     end
 
     def dispose
