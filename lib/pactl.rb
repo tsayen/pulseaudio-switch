@@ -65,9 +65,9 @@ module AudioSwitch
     def self.parse_sinks(out, default_sink_name)
       PactlOut.new(
         [
-          { marker: /Sink #/, property: :id },
-          { marker: /Name:/, property: :name },
-          { marker: /Description:/, property: :description }
+          { marker: 'Sink #', property: :id },
+          { marker: 'Name:', property: :name },
+          { marker: 'Description:', property: :description }
         ]
       ).parse(out).each { |sink| sink[:default] = true if sink[:name] == default_sink_name }
     end
@@ -75,7 +75,7 @@ module AudioSwitch
     def self.parse_inputs(out)
       PactlOut.new(
         [
-          { marker: /Sink Input #/, property: :id }
+          { marker: 'Sink Input #', property: :id }
         ]
       ).parse(out)
     end
@@ -96,8 +96,8 @@ module AudioSwitch
     def self.parse_modules(out)
       PactlOut.new(
         [
-          { marker: /Module #/ },
-          { marker: /Name:/, property: :name }
+          { marker: 'Module #' },
+          { marker: 'Name:', property: :name }
         ]
       ).parse(out)
     end
@@ -105,8 +105,8 @@ module AudioSwitch
     def self.parse_sources(out)
       PactlOut.new(
         [
-          { marker: /Source #/, property: :id },
-          { marker: /Mute:/, property: :mute }
+          { marker: 'Source #', property: :id },
+          { marker: 'Mute:', property: :mute }
         ]
       ).parse(out).each { |source| source[:mute] = source[:mute] == 'yes' }
     end
@@ -127,7 +127,7 @@ module AudioSwitch
 
         string.each_line do |line|
           field = @fields[field_id]
-          next unless line =~ field[:marker]
+          next unless line =~ Regexp.new(field[:marker])
 
           result = {} if field_id == 0
           update(result, line, field)
