@@ -38,6 +38,12 @@ describe Pactl do
     expect(modules).to include(name: 'module-rtp-send')
   end
 
+  it 'should parse pactl sources' do
+    sources = Pactl.parse_sources(File.read('spec/resources/pactl_list_sources'))
+
+    expect(sources).to eql([{ id: '1', mute: true }, { id: '110', mute: false }])
+  end
+
   it 'should notify of events' do
     command = ["Event 'new' on sink-input '#72'",
                "Event 'change' on sink '#0'",

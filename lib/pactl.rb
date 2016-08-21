@@ -68,12 +68,12 @@ module AudioSwitch
       out.each_line do |line|
         case line
         when /Sink #/
-          sink = { id: line.match(/Sink #(\d+)$/)[1] }
+          sink = { id: read_id(line) }
         when /Name:/
-          sink[:name] = line.match(/Name:\s*(.*?)\s*$/)[1]
+          sink[:name] = read_name(line)
           sink[:default] = true if sink[:name] == default_sink_name
         when /Description:/
-          sink[:description] = line.match(/Description:\s*(.*?)\s*$/)[1]
+          sink[:description] = read_property(line, 'Description:')
           sinks << sink
           sink = nil
         end
@@ -84,7 +84,7 @@ module AudioSwitch
     def self.parse_inputs(out)
       out.split("\n")
          .select { |line| line =~ /^Sink Input #/ }
-         .map { |line| { id: line.match(/#(\d+)$/)[1] } }
+         .map { |line| { id: read_id(line) } }
     end
 
     def self.parse_event(out_line)
@@ -108,12 +108,40 @@ module AudioSwitch
         when /Module #/
           mod = {}
         when /Name:/
-          mod[:name] = line.match(/Name:\s*(.*?)\s*$/)[1]
+          mod[:name] = read_name(line)
           modules << mod
           mod = nil
         end
       end
       modules
+    end
+
+    def self.parse_sources(out)
+      sources = []
+      source = nil
+      out.each_line do |line|
+        case line
+        when /Source #/
+          source = { id: read_id(line) }
+        when /Mute:/
+          source[:mute] = (read_property(line, 'Mute:') == 'yes')
+          sources << source
+          source = nil
+        end
+      end
+      sources
+    end
+
+    def self.read_id(line)
+      read_property(line, '#')
+    end
+
+    def self.read_name(line)
+      read_property(line, 'Name:')
+    end
+
+    def self.read_property(line, label)
+      line.match(Regexp.new("#{label}\\s*(.*?)\\s*$"))[1]
     end
   end
 end
