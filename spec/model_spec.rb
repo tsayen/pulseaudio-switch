@@ -134,7 +134,7 @@ describe AudioSwitch::Model do
     pactl = instance_double('AudioSwitch::Pactl',
                             subscribe: nil,
                             mute_source: nil,
-                            sources: [{ id: '1' }, { id: '2' }])
+                            sources: [{ id: '1' }, { id: '2' }, { id: '3', name: 'rtp.monitor' }])
     model = AudioSwitch::Model.new(pactl)
     # when
     model.mute_sources
@@ -148,7 +148,7 @@ describe AudioSwitch::Model do
     pactl = instance_double('AudioSwitch::Pactl',
                             subscribe: nil,
                             unmute_source: nil,
-                            sources: [{ id: '1' }, { id: '2' }])
+                            sources: [{ id: '1' }, { id: '2' }, { id: '3', name: 'rtp.monitor' }])
     model = AudioSwitch::Model.new(pactl)
     # when
     model.unmute_sources
@@ -180,6 +180,12 @@ describe AudioSwitch::Model do
       [{ mute: false },
        { mute: false }]
     ).sources_mute?).to be_falsey
+
+    expect(model(
+      [{ name: 'rtp.monitor', mute: false },
+       { mute: true },
+       { mute: true }]
+    ).sources_mute?).to be_truthy
 
     expect(model(
       []

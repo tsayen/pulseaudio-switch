@@ -12,7 +12,7 @@ module AudioSwitch
     end
 
     def sinks
-      default_sink_name = self.class.parse_default_sink(`pactl stat`)
+      default_sink_name = self.class.parse_default_sink(`pacmd stat`)
       self.class.parse_sinks(`pactl list sinks`, default_sink_name)
     end
 
@@ -92,13 +92,14 @@ module AudioSwitch
       Out.new(out).parse_objects(
         [
           { marker: 'Source #', property: :id },
+          { marker: 'Name:', property: :name },
           { marker: 'Mute:', property: :mute }
         ]
       ).each { |source| source[:mute] = source[:mute] == 'yes' }
     end
 
     def self.parse_default_sink(out)
-      Out.new(out).parse_property('Default Sink:')
+      Out.new(out).parse_property('Default sink name:')
     end
 
     class Out

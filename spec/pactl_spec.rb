@@ -27,7 +27,7 @@ describe Pactl do
   end
 
   it 'should parse pactl stat' do
-    default_sink = Pactl.parse_default_sink(File.read('spec/resources/pactl_stat'))
+    default_sink = Pactl.parse_default_sink(File.read('spec/resources/pacmd_stat'))
 
     expect(default_sink).to eql('alsa_output.pci-0000_00_1b.0.analog-stereo')
   end
@@ -41,7 +41,12 @@ describe Pactl do
   it 'should parse pactl sources' do
     sources = Pactl.parse_sources(File.read('spec/resources/pactl_list_sources'))
 
-    expect(sources).to eql([{ id: '1', mute: true }, { id: '110', mute: false }])
+    expect(sources).to eql(
+      [
+        { id: '1', mute: true, name: 'alsa_input.pci-0000_00_1b.0.analog-stereo' },
+        { id: '110', mute: false, name: 'alsa_output.pci-0000_00_1b.0.analog-stereo.monitor' }
+      ]
+    )
   end
 
   it 'should notify of events' do

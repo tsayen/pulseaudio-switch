@@ -56,22 +56,26 @@ module AudioSwitch
     end
 
     def mute_sources
-      @pactl.sources.each do |source|
+      sources.each do |source|
         @pactl.mute_source(source[:id])
       end
     end
 
     def unmute_sources
-      @pactl.sources.each do |source|
+      sources.each do |source|
         @pactl.unmute_source(source[:id])
       end
     end
 
     def sources_mute?
-      @pactl.sources.all? { |source| source[:mute] }
+      sources.all? { |source| source[:mute] }
     end
 
     private
+
+    def sources
+      @pactl.sources.select { |source| source[:name] != 'rtp.monitor' }
+    end
 
     def handle(event, block)
       block.call if event[:object] == :sink ||

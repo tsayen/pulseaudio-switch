@@ -1,0 +1,15 @@
+Memory blocks currently allocated: 28, size: 155.8 KiB.
+Memory blocks allocated during the whole lifetime: 386558, size: 659.8 MiB.
+Memory blocks imported from other processes: 25, size: 85.5 KiB.
+Memory blocks exported to other processes: 0, size: 0 B.
+Total sample cache size: 0 B.
+Default sample spec: s16le 2ch 44100Hz
+Default channel map: front-left,front-right
+Default sink name: alsa_output.pci-0000_00_1b.0.analog-stereo
+Default source name: alsa_input.pci-0000_00_1b.0.analog-stereo
+Memory blocks of type POOL: 3 allocated/261212 accumulated.
+Memory blocks of type POOL_EXTERNAL: 0 allocated/0 accumulated.
+Memory blocks of type APPENDED: 0 allocated/0 accumulated.
+Memory blocks of type USER: 0 allocated/0 accumulated.
+Memory blocks of type FIXED: 0 allocated/69045 accumulated.
+Memory blocks of type IMPORTED: 25 allocated/56301 accumulated.
