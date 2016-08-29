@@ -63,11 +63,11 @@ PLATFORMS
 
 DEPENDENCIES
   audio_switch!
-  bundler
-  rake
-  rspec
-  rspec-wait
-  rubocop
+  bundler (~> 1.12)
+  rake (~> 11.2)
+  rspec (~> 3.5)
+  rspec-wait (~> 0.0.9)
+  rubocop (~> 0.41)
 
 BUNDLED WITH
    1.12.5
