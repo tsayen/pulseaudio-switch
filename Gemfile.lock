@@ -1,3 +1,10 @@
+PATH
+  remote: .
+  specs:
+    audio_switch (0.0.1)
+      gtk2
+      ruby-libappindicator
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -54,11 +61,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  gtk2
+  audio_switch!
+  bundler
   rspec
   rspec-wait
   rubocop
-  ruby-libappindicator
 
 BUNDLED WITH
-   1.11.2
+   1.12.5
