@@ -2,8 +2,8 @@ PATH
   remote: .
   specs:
     audio_switch (0.0.1)
-      gtk2
-      ruby-libappindicator
+      gtk2 (= 3.0.8)
+      ruby-libappindicator (= 0.1.5)
 
 GEM
   remote: https://rubygems.org/
@@ -30,6 +30,7 @@ GEM
     pkg-config (1.1.7)
     powerpack (0.1.1)
     rainbow (2.1.0)
+    rake (11.2.2)
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
       rspec-expectations (~> 3.5.0)
@@ -63,6 +64,7 @@ PLATFORMS
 DEPENDENCIES
   audio_switch!
   bundler
+  rake
   rspec
   rspec-wait
   rubocop

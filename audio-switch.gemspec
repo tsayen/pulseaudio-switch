@@ -12,16 +12,17 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 2.3'
 
-  gem.files = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(spec|vendor)/}) }
+  gem.files = Dir['lib/**/*.rb'] + Dir['bin/*']
   gem.bindir = 'bin'
-  gem.executables = gem.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  gem.executables << 'audio_switch'
   gem.require_paths = ['lib']
 
-  gem.add_dependency 'gtk2'
-  gem.add_dependency 'ruby-libappindicator'
+  gem.add_dependency 'gtk2', '3.0.8'
+  gem.add_dependency 'ruby-libappindicator', '0.1.5'
 
   gem.add_development_dependency 'bundler'
+  gem.add_development_dependency 'rake'
+  gem.add_development_dependency 'rubocop'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'rspec-wait'
-  gem.add_development_dependency 'rubocop'
 end
