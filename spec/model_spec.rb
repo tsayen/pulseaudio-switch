@@ -1,4 +1,4 @@
-require 'model.rb'
+require 'audio_switch/model'
 
 describe AudioSwitch::Model do
   it 'should set default sink' do

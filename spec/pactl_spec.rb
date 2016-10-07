@@ -1,4 +1,4 @@
-require 'pactl.rb'
+require 'audio_switch/pactl'
 require 'rspec/wait'
 
 Pactl = AudioSwitch::Pactl
