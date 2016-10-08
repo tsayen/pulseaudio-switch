@@ -6,7 +6,10 @@ Gem::Specification.new do |gem|
   gem.authors = ['Anatolii Saienko']
   gem.email = ['anatoly.sayenko@gmail.com']
   gem.summary = 'Sink switch for PulseAudio'
-  gem.description = 'Ubuntu indicator that lets you switch audio sinks, toggle RTP sender and mic. Depends on PulseAudio'
+  gem.description =
+    'Ubuntu applet that lets you switch audio sinks, '\
+    'toggle RTP sender and inputs. '\
+    'Depends on PulseAudio and libappindicator-dev.'
   gem.homepage = 'https://github.com/tsayen/audio-switch'
   gem.license = 'MIT'
 
