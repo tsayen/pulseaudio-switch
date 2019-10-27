@@ -25,7 +25,8 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency 'bundler', '~> 1.12'
   gem.add_development_dependency 'rake', '~> 11.2'
-  gem.add_development_dependency 'rubocop', '~> 0.41'
   gem.add_development_dependency 'rspec', '~> 3.5'
   gem.add_development_dependency 'rspec-wait', '~> 0.0.9'
+  gem.add_development_dependency 'rubocop'
+  gem.add_development_dependency 'solargraph'
 end

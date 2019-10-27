@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require 'audio_switch'
+require 'logger'
 
 begin
   puts "audio_switch version #{AudioSwitch::VERSION}"

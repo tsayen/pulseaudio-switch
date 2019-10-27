@@ -5,10 +5,10 @@ Ubuntu 14.04 and 16.04. It uses `pactl` and `pacmd` programs to control sound se
 
 ## Installation
 
-Applet can be downloaded as a Ruby gem `audio_switch`. It depends on `libappindicator-dev`.
+Applet can be downloaded as a Ruby gem `audio_switch`. It depends on `libappindicator-dev` and `libcanberra-gtk-module`.
 
 ```bash
-apt-get install libappindicator-dev
+apt-get install libappindicator-dev libcanberra-gtk-module
 gem install audio_switch
 ```  
 

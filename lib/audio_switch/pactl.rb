@@ -116,7 +116,7 @@ module AudioSwitch
           field = fields[field_id]
           next unless line =~ Regexp.new(field[:marker])
 
-          object = {} if field_id == 0
+          object = {} if field_id.zero?
           update(object, line, field)
 
           field_id += 1

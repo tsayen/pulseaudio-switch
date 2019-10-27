@@ -27,6 +27,7 @@ module AudioSwitch
     def rtp_on?
       return false unless @pactl.sinks.any? { |sink| sink[:name] == RTP }
       return false unless @pactl.modules.any? { |mod| mod[:name] == MODULE_RTP_SEND }
+
       true
     end
 
@@ -74,7 +75,7 @@ module AudioSwitch
     private
 
     def sources
-      @pactl.sources.select { |source| source[:name] != 'rtp.monitor' }
+      @pactl.sources.reject { |source| source[:name] == 'rtp.monitor' }
     end
 
     def handle(event, block)
