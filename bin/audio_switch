@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
-require 'audio_switch'
-require 'logger'
+require_relative '../lib/audio_switch'
 
 begin
-  puts "audio_switch version #{AudioSwitch::VERSION}"
   AudioSwitch::App.start
 rescue Interrupt
-  puts "\nexit"
+  AudioSwitch::LOG.info('exit')
+rescue StandardError => e
+  AudioSwitch::LOG.error('uncaught') { e }
 end

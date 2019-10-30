@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    audio_switch (0.0.2)
+    audio_switch (0.0.3)
       gtk2 (= 3.3.6)
       ruby-libappindicator (= 0.1.5)
 

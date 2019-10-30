@@ -1,3 +1,4 @@
+require_relative 'test_logger'
 require 'audio_switch/model'
 
 describe AudioSwitch::Model do
@@ -103,7 +104,7 @@ describe AudioSwitch::Model do
                                     { id: 2, name: 'analog', default: true }],
                             inputs: [],
                             load_module: nil,
-                            :'default_sink=' => nil,
+                            'default_sink=': nil,
                             sources: [{ id: 10 }],
                             mute_source: nil)
     model = AudioSwitch::Model.new(pactl)

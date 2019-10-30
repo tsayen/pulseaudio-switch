@@ -8,4 +8,4 @@ RuboCop::RakeTask.new :rubocop
 
 task package: :build
 
-task default: [:rubocop, :spec]
+task default: %i[rubocop spec]

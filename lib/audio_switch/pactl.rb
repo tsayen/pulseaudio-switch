@@ -3,10 +3,12 @@ require 'pty'
 module AudioSwitch
   class Pactl
     def move_input(input_id, sink_id)
+      AudioSwitch::LOG.info "moving sink input '#{input_id}' to sink '#{sink_id}'"
       `pactl move-sink-input #{input_id} #{sink_id}`
     end
 
     def default_sink=(sink_id)
+      AudioSwitch::LOG.info "setting default sink to '#{sink_id}'"
       # pactl doesn't have this command
       `pacmd set-default-sink #{sink_id}`
     end
@@ -29,31 +31,36 @@ module AudioSwitch
     end
 
     def load_module(mod, options = {})
+      AudioSwitch::LOG.info "loading module '#{mod}' with options '#{options}'"
       `pactl load-module #{mod} #{ModuleOptions.new(options)}`
     end
 
     def unload_module(mod)
+      AudioSwitch::LOG.info "unloading module '#{mod}'"
       `pactl unload-module #{mod}`
     end
 
     def subscribe(command = 'pactl subscribe')
       Thread.start do
+        AudioSwitch::LOG.info "starting '#{command}'"
         @pactl_sub = PTY.spawn(command)[0]
         begin
           @pactl_sub.each do |line|
             yield(Out.new(line).parse_event)
           end
-        rescue Errno::EIO, IOError
-          return
+        rescue Errno::EIO, IOError => e
+          AudioSwitch::LOG.error("reading '#{command}' output") { e }
         end
       end
     end
 
     def mute_source(source_id)
+      AudioSwitch::LOG.info "muting source '#{source_id}'"
       `pactl set-source-mute #{source_id} true`
     end
 
     def unmute_source(source_id)
+      AudioSwitch::LOG.info "unmuting source '#{source_id}'"
       `pactl set-source-mute #{source_id} false`
     end
 

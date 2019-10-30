@@ -1,3 +1,4 @@
+require_relative 'test_logger'
 require 'audio_switch/pactl'
 require 'rspec/wait'
 
@@ -50,11 +51,18 @@ describe Pactl do
   end
 
   it 'should notify of events' do
-    command = ["Event 'new' on sink-input '#72'",
-               "Event 'change' on sink '#0'",
-               "Event 'remove' on sink-input '#60'"]
+    command =
+      "while : ; do
+    #{
+      [
+        "Event 'new' on sink-input '#72'",
+        "Event 'change' on sink '#0'",
+        "Event 'remove' on sink-input '#60'"
+      ]
               .map { |line| "echo #{line}" }
-              .join('; ') + '; sleep 10s'
+              .join('; ')
+    };
+    done"
 
     pactl = Pactl.new
     events = []
@@ -66,15 +74,15 @@ describe Pactl do
 
     wait_for(events).to \
       eql([{
-            type:  :new,
+            type: :new,
             object: :'sink-input',
             id: '72'
           }, {
-            type:  :change,
+            type: :change,
             object: :sink,
             id: '0'
           }, {
-            type:  :remove,
+            type: :remove,
             object: :'sink-input',
             id: '60'
           }])

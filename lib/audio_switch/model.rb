@@ -14,6 +14,7 @@ module AudioSwitch
     end
 
     def select_sink(sink_id)
+      AudioSwitch::LOG.info "selecting sink '#{sink_id}'"
       @pactl.default_sink = sink_id
       @pactl.inputs.each do |input|
         @pactl.move_input(input[:id], sink_id)
@@ -32,6 +33,7 @@ module AudioSwitch
     end
 
     def rtp_on
+      AudioSwitch::LOG.info 'turning RTP on'
       # prevent positive feedback loop
       mute_sources
       # see https://cgit.freedesktop.org/pulseaudio/paprefs/tree/src/paprefs.cc
@@ -52,17 +54,20 @@ module AudioSwitch
     end
 
     def rtp_off
+      AudioSwitch::LOG.info 'turning RTP off'
       @pactl.unload_module(MODULE_RTP_SEND)
       @pactl.unload_module(MODULE_NULL_SINK)
     end
 
     def mute_sources
+      AudioSwitch::LOG.info 'muting all sources'
       sources.each do |source|
         @pactl.mute_source(source[:id])
       end
     end
 
     def unmute_sources
+      AudioSwitch::LOG.info 'unmuting all sources'
       sources.each do |source|
         @pactl.unmute_source(source[:id])
       end

@@ -9,3 +9,9 @@ Metrics/MethodLength:
 
 Style/FrozenStringLiteralComment:
   Enabled: false
+
+Metrics/BlockLength:
+  Exclude: 
+    - 'Gemfile'
+    - 'Rakefile'
+    - 'spec/**/*.rb'
