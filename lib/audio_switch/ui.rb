@@ -12,7 +12,11 @@ module AudioSwitch
     def start
       add_to_tray
       subscribe
-      Gtk.main
+      AudioSwitch::LOG.info 'starting GTK main'
+      loop do
+        Gtk.main
+        AudioSwitch::LOG.info 'restarting GTK main'
+      end
     end
 
     private

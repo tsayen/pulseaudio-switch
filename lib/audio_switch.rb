@@ -10,7 +10,7 @@ module AudioSwitch
 
   module App
     def self.start
-      AudioSwitch::LOG.info("starting audio_switch #{AudioSwitch::VERSION}")
+      AudioSwitch::LOG.info("starting audio_switch #{AudioSwitch::VERSION} on ruby #{RUBY_VERSION}")
       pactl = AudioSwitch::Pactl.new
       model = AudioSwitch::Model.new(pactl)
       ui = AudioSwitch::UI.new(model)
