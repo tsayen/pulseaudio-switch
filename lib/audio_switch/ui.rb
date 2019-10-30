@@ -33,10 +33,14 @@ module AudioSwitch
 
     def draw(sinks)
       clear
-      sinks.each { |sink| add new_item(sink) }
+      sinks
+        .sort_by { |sink| sink[:description] }
+        .each { |sink| add new_item(sink) }
       add new_separator
       add new_rtp_toggle
       add new_mute_toggle
+      add new_separator
+      add new_quit_item
     end
 
     def add(item)
@@ -79,6 +83,14 @@ module AudioSwitch
         end
       end
       toggle
+    end
+
+    def new_quit_item
+      item = Gtk::MenuItem.new('Quit')
+      item.signal_connect('activate') do
+        AudioSwitch::App.quit
+      end
+      item
     end
 
     def new_separator

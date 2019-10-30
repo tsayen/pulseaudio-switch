@@ -15,3 +15,6 @@ Metrics/BlockLength:
     - 'Gemfile'
     - 'Rakefile'
     - 'spec/**/*.rb'
+
+Metrics/AbcSize: 
+  Enabled: false

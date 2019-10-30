@@ -16,5 +16,10 @@ module AudioSwitch
       ui = AudioSwitch::UI.new(model)
       ui.start
     end
+
+    def self.quit
+      AudioSwitch::LOG.info('quitting audio_switch')
+      exit
+    end
   end
 end
