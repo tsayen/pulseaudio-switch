@@ -83,16 +83,11 @@ describe AudioSwitch::Model do
     expect(model(
       [],
       [{ name: 'rtp' }]
-    ).rtp_on?).to be_falsey
+    ).rtp_on?).to be_truthy
 
     expect(model(
       [{ name: 'module-rtp-send' }],
       []
-    ).rtp_on?).to be_falsey
-
-    expect(model(
-      [{ name: 'module-stream-restore' }],
-      [{ name: 'rtp' }]
     ).rtp_on?).to be_falsey
   end
 

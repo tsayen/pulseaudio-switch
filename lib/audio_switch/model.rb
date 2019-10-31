@@ -26,10 +26,7 @@ module AudioSwitch
     end
 
     def rtp_on?
-      return false unless @pactl.sinks.any? { |sink| sink[:name] == RTP }
-      return false unless @pactl.modules.any? { |mod| mod[:name] == MODULE_RTP_SEND }
-
-      true
+      @pactl.sinks.any? { |sink| sink[:name] == RTP }
     end
 
     def rtp_on
