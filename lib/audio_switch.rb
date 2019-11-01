@@ -1,12 +1,12 @@
 require 'logger'
+require_relative 'app_logger.rb'
 require_relative 'audio_switch/pactl.rb'
 require_relative 'audio_switch/model.rb'
 require_relative 'audio_switch/ui.rb'
 require_relative 'audio_switch/version.rb'
 
 module AudioSwitch
-  LOG = Logger.new("#{Dir.home}/.audio_switch/audio_switch.log", 'daily')
-  LOG.level = Logger::INFO
+  LOG = configure_logger
 
   module App
     def self.start
