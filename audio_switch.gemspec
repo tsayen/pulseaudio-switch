@@ -20,8 +20,8 @@ Gem::Specification.new do |gem|
   gem.executables << 'audio_switch'
   gem.require_paths = ['lib']
 
-  gem.add_dependency 'gtk2', '3.3.6'
-  gem.add_dependency 'ruby-libappindicator', '0.1.5'
+  gem.add_dependency 'gtk2', '~> 3.4.3'
+  gem.add_dependency 'ruby-libappindicator', '~> 0.1.5'
 
   gem.add_development_dependency 'bundler', '~> 1.12'
   gem.add_development_dependency 'rake', '~> 12.3'
